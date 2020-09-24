@@ -13,7 +13,7 @@ import random
 import string
 
 WORDLIST_FILENAME = "words.txt"
-
+fake line
 
 def load_words():
     """

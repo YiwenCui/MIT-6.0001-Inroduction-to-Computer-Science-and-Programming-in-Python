@@ -237,7 +237,6 @@ class CiphertextMessage(Message):
     def find_word(self,shift):
         words = self.apply_shift(shift).split()
         valid_word = []
-        print (words)
         for w in words:
             if is_word(self.get_valid_words(), w)==True:
                 valid_word.append(w)
@@ -268,7 +267,6 @@ class CiphertextMessage(Message):
         
         max_value = 0
         max_key = "null"
-        print (dic)
         for key,value in dic.items():
             if value > max_value:
                 max_value = value
@@ -295,6 +293,9 @@ if __name__ == '__main__':
     
 
     #TODO: WRITE YOUR TEST CASES HERE
+    ciphertext = CiphertextMessage(get_story_string())
+    print(ciphertext.decrypt_message())
+    
 
     #TODO: best shift value and unencrypted story 
     

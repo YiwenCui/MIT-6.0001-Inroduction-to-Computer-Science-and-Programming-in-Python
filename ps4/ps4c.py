@@ -64,13 +64,15 @@ class SubMessage(object):
         '''
         Initializes a SubMessage object
                 
-        text (string): the message's text
-
+        text (string): the message's text'''
+        '''
         A SubMessage object has two attributes:
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
+        
     
     def get_message_text(self):
         '''
@@ -78,7 +80,7 @@ class SubMessage(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +89,7 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words.copy()
                 
     def build_transpose_dict(self, vowels_permutation):
         '''
@@ -108,8 +110,15 @@ class SubMessage(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
+        transpose_dict = {}
+        for consonant_letter in CONSONANTS_LOWER + CONSONANTS_UPPER:
+            transpose_dict[consonant_letter] = consonant_letter
+        for n in range(5): 
+            transpose_dict[VOWELS_LOWER[n]] = vowels_permutation[n].lower()
+            transpose_dict[VOWELS_UPPER[n]] = vowels_permutation[n].upper()
+        return transpose_dict
+
         
-        pass #delete this line and replace with your code here
     
     def apply_transpose(self, transpose_dict):
         '''
@@ -118,8 +127,15 @@ class SubMessage(object):
         Returns: an encrypted version of the message text, based 
         on the dictionary
         '''
+        encrypted_version = ""
+        for char in self.get_message_text():
+            if char in VOWELS_LOWER + VOWELS_UPPER + CONSONANTS_LOWER + CONSONANTS_UPPER:
+                char = transpose_dict[char]
+                encrypted_version = encrypted_version +char
+            else:
+                encrypted_version += char
+        return encrypted_version
         
-        pass #delete this line and replace with your code here
         
 class EncryptedSubMessage(SubMessage):
     def __init__(self, text):
@@ -132,7 +148,7 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        SubMessage.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -152,10 +168,34 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
+        
+        vowels_permutation_list = get_permutations(VOWELS_LOWER)
+        best_decrypted_message_list = []
+        for vowels_permutation in vowels_permutation_list:
+            
+            best_decrypted_message = ""
+            deciphered_message = self.apply_transpose(self.build_transpose_dict(vowels_permutation))
+            
+            for word in deciphered_message.split():
+                
+                if is_word(self.valid_words, word) == True:
+                    
+                    best_decrypted_message = best_decrypted_message + " " + word
+                    best_decrypted_message_list.append(best_decrypted_message)
+            
+        if len(best_decrypted_message_list)== 0:
+            return self.get_message_text()
+        else: 
+            return  max(best_decrypted_message_list, key=len)
+            
+
+
+
+
+        
     
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
 
     # Example test case
     message = SubMessage("Hello World!")

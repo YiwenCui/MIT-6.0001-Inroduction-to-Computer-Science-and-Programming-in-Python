@@ -208,3 +208,11 @@ if __name__ == '__main__':
     print("Decrypted message:", enc_message.decrypt_message())
      
     #TODO: WRITE YOUR TEST CASES HERE
+    message = SubMessage("You are a super wonderful coder")
+    permutation = "eaiuo"
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(), "Permutation:", permutation)
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    message = SubMessage("You are a super wonderful coder")
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
